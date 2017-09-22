@@ -17,7 +17,7 @@ namespace ELXamarin3
        public CloudDataStore()
         {
             client = new HttpClient();
-            client.BaseAddress = new Uri($“{App.BackendUrl}/“);
+            client.BaseAddress = new Uri($"{App.BackendUrl}/");
 
            items = new List<Item>();
         }
@@ -26,7 +26,7 @@ namespace ELXamarin3
         {
             if (forceRefresh && CrossConnectivity.Current.IsConnected)
             {
-                var json = await client.GetStringAsync($“api/items”);
+                var json = await client.GetStringAsync($"api/items");
                 items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<Item>>(json));
             }
 
@@ -37,7 +37,7 @@ namespace ELXamarin3
         {
             if (id != null && CrossConnectivity.Current.IsConnected)
             {
-                var json = await client.GetStringAsync($“api/item/{id}“);
+                var json = await client.GetStringAsync($"api/item/{id}");
                 return await Task.Run(() => JsonConvert.DeserializeObject<Item>(json));
             }
 
@@ -51,7 +51,7 @@ namespace ELXamarin3
 
            var serializedItem = JsonConvert.SerializeObject(item);
 
-           var response = await client.PostAsync($“api/add”, new StringContent(serializedItem, Encoding.UTF8, “application/json”));
+           var response = await client.PostAsync($"api/add", new StringContent(serializedItem, Encoding.UTF8, "application/json"));
 
            return response.IsSuccessStatusCode;
         }
@@ -65,7 +65,7 @@ namespace ELXamarin3
             var buffer = Encoding.UTF8.GetBytes(serializedItem);
             var byteContent = new ByteArrayContent(buffer);
 
-           var response = await client.PutAsync(new Uri($“api/item/{item.Id}“), byteContent);
+           var response = await client.PutAsync(new Uri($"api/item/{item.Id}"), byteContent);
 
            return response.IsSuccessStatusCode;
         }
@@ -75,7 +75,7 @@ namespace ELXamarin3
             if (string.IsNullOrEmpty(id) && !CrossConnectivity.Current.IsConnected)
                 return false;
 
-           var response = await client.DeleteAsync($“api/delete/{id}“);
+           var response = await client.DeleteAsync($"api/delete/{id}");
 
            return response.IsSuccessStatusCode;
         }
